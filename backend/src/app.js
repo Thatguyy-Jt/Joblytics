@@ -49,7 +49,7 @@ app.use(express.json());
 // In production, use the configured FRONTEND_URL
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
+    // Allow requests with no origin (like mobile apps, curl requests, or health checks)
     if (!origin) {
       return callback(null, true);
     }
@@ -61,9 +61,24 @@ const corsOptions = {
       }
     }
     
-    // In production, only allow the configured FRONTEND_URL
+    // In production, allow the configured FRONTEND_URL
+    // Also allow Render's internal health checks (no origin)
     if (origin === config.FRONTEND_URL) {
       return callback(null, true);
+    }
+    
+    // For production, be more lenient - allow if it matches the frontend URL pattern
+    if (config.NODE_ENV === 'production' && config.FRONTEND_URL) {
+      try {
+        const frontendUrl = new URL(config.FRONTEND_URL);
+        const originUrl = new URL(origin);
+        // Allow same domain
+        if (originUrl.origin === frontendUrl.origin) {
+          return callback(null, true);
+        }
+      } catch (e) {
+        // Invalid URL, continue to error
+      }
     }
     
     callback(new Error('Not allowed by CORS'));

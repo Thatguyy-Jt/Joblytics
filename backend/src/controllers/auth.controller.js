@@ -68,14 +68,6 @@ class AuthController {
         },
       });
     } catch (error) {
-      // #region agent log
-      try {
-        const fs = await import('fs');
-        const logData = JSON.stringify({location:'auth.controller.js:69',message:'Register error handler',data:{statusCode:error.statusCode||500,errorMessage:error.message,errorType:error.constructor?.name},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'}) + '\n';
-        fs.appendFileSync('c:\\Users\\HP\\Desktop\\Ai job application tracker\\.cursor\\debug.log', logData);
-      } catch {}
-      // #endregion
-      
       // Handle service errors
       const statusCode = error.statusCode || 500;
       res.status(statusCode).json({

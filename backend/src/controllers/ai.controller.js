@@ -25,16 +25,9 @@ class AIController {
    * POST /api/ai/resume-match
    */
   async analyzeResumeMatch(req, res) {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/55c1da56-fa20-423b-86db-f3d5b4fb5ec7',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ai.controller.js:27',message:'analyzeResumeMatch entry',data:{hasUser:!!req.user,hasBody:!!req.body},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'E'})}).catch(()=>{});
-    // #endregion
     try {
       const userId = req.user._id.toString();
       const { jobDescription, jobTitle, company } = req.body;
-
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/55c1da56-fa20-423b-86db-f3d5b4fb5ec7',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ai.controller.js:33',message:'before service call',data:{userId,hasJobDesc:!!jobDescription},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-      // #endregion
 
       const analysis = await aiService.analyzeResumeMatch(userId, {
         jobDescription,
@@ -42,24 +35,11 @@ class AIController {
         company,
       });
 
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/55c1da56-fa20-423b-86db-f3d5b4fb5ec7',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ai.controller.js:42',message:'service call success',data:{hasAnalysis:!!analysis,hasMatchScore:!!analysis?.matchScore},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-      // #endregion
-
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/55c1da56-fa20-423b-86db-f3d5b4fb5ec7',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ai.controller.js:45',message:'before res.json',data:{headersSent:res.headersSent},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
-      // #endregion
       res.status(200).json({
         success: true,
         data: { analysis },
       });
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/55c1da56-fa20-423b-86db-f3d5b4fb5ec7',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ai.controller.js:51',message:'after res.json',data:{headersSent:res.headersSent},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
-      // #endregion
     } catch (error) {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/55c1da56-fa20-423b-86db-f3d5b4fb5ec7',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ai.controller.js:54',message:'catch block',data:{errorName:error?.name,errorMessage:error?.message,errorStatusCode:error?.statusCode,errorStatus:error?.status,headersSent:res.headersSent,errorStack:error?.stack?.substring(0,300)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-      // #endregion
       // Enhanced error logging
       console.error('=== AI Controller Error ===');
       console.error('Error Name:', error.name);
@@ -74,9 +54,6 @@ class AIController {
       const statusCode = error.statusCode || 500;
       // Check if response already sent
       if (res.headersSent) {
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/55c1da56-fa20-423b-86db-f3d5b4fb5ec7',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ai.controller.js:70',message:'response already sent',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
-        // #endregion
         console.error('Cannot send error response - headers already sent');
         return;
       }

@@ -26,24 +26,8 @@ class UserService {
    * Business logic: Check email uniqueness, validate data
    */
   async createUser(userData) {
-    // #region agent log
-    try {
-      const fs = await import('fs');
-      const logData = JSON.stringify({location:'user.service.js:28',message:'createUser entry',data:{email:userData.email,hasFirstName:!!userData.firstName,hasLastName:!!userData.lastName},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'}) + '\n';
-      fs.appendFileSync('c:\\Users\\HP\\Desktop\\Ai job application tracker\\.cursor\\debug.log', logData);
-    } catch {}
-    // #endregion
-    
     // Check if email already exists
     const emailExists = await userRepository.emailExists(userData.email);
-    
-    // #region agent log
-    try {
-      const fs = await import('fs');
-      const logData = JSON.stringify({location:'user.service.js:32',message:'Email exists check result',data:{email:userData.email,emailExists},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'}) + '\n';
-      fs.appendFileSync('c:\\Users\\HP\\Desktop\\Ai job application tracker\\.cursor\\debug.log', logData);
-    } catch {}
-    // #endregion
     
     if (emailExists) {
       const error = new Error('Email already exists');
