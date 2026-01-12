@@ -32,7 +32,7 @@ services:
       - key: OPENAI_API_KEY
         sync: false
       - key: AI_MODE
-        value: live
+        value: mock
       - key: EMAIL_SERVICE
         value: resend
       - key: RESEND_API_KEY
